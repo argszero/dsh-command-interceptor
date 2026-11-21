@@ -1,0 +1,61 @@
+{
+  "name": "@argszero/dsh-command-interceptor",
+  "version": "0.1.0",
+  "description": "One interception point for every typed slash command. The commands service emits only `commands/change` and runs `execute()` with no waterfall around it, so a plugin that must inspect, defer, answer or replace a typed command can only replace `commands.execute` — and two plugins replacing one method drop each other's wrapper. This plugin takes that one wrapper itself and fans it out to a registry: N plugins register interceptors, the first non-`next` outcome wins, and every wrapper is restored when the plugin unloads. Answers discussion #14014.",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/**/*.js",
+    "lib/types/**/*.d.ts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/argszero/dsh-command-interceptor.git"
+  },
+  "homepage": "https://github.com/argszero/dsh-command-interceptor#readme",
+  "bugs": {
+    "url": "https://github.com/argszero/dsh-command-interceptor/issues"
+  },
+  "keywords": [
+    "cordis",
+    "deepseek-harness",
+    "dsh",
+    "plugin",
+    "commands",
+    "slash-command",
+    "interceptor",
+    "waterfall"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "pretest": "tsc",
+    "test": "node --test \"test/*.spec.mjs\"",
+    "prepublishOnly": "tsc"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.1.0",
+    "@types/node": "^24.19.1",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2 || >=4.0.5-alpha.1 <5",
+    "@deepseek-ai/dsh-commands": ">=0.2.1-rc.2 <0.2.2 || >=0.2.2-rc.1 <0.3.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

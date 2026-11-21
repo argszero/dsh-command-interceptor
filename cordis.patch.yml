@@ -1,0 +1,25 @@
+# The layer this bundle contributes: one row, the command interception point.
+#
+# It changes no command and no registry. It installs the single wrapper around
+# `ctx.commands.execute` — the one method a command-intercepting plugin would
+# otherwise each replace on their own — and fans it out to the
+# `commandInterceptors` registry, so plugins that declare
+# `inject: ['commandInterceptors']` compose in registration order instead of
+# dropping each other's wrapper. The displaced method is restored when this row
+# unloads.
+- insert:
+    - id: command-interceptor
+      name: '@argszero/dsh-command-interceptor'
+      config:
+        # `answer` (default) lets an interceptor defer, answer or replace a typed
+        # command. `observe` runs every interceptor and logs what it would have
+        # decided, but always runs the command as typed — mount this first on a
+        # deployment whose behaviour you do not want to change yet. `off` mounts
+        # nothing.
+        mode: answer
+        # How many `replace` outcomes deep one invocation may go before the
+        # command runs as last replaced. Guards a pair of interceptors that
+        # rewrite into each other.
+        maxHops: 4
+        # Log each interception, replacement and interceptor failure.
+        report: true
